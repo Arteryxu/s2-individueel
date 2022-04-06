@@ -16,9 +16,11 @@ namespace SwitchPresentation.Controllers
         }
 
         // GET: HomeController1/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(int Id)
         {
-            return View();
+            GameCollection gameColl = new GameCollection();
+            Game game = gameColl.GetDetails(Id);
+            return View(game);
         }
 
         // GET: HomeController1/Create
@@ -38,7 +40,7 @@ namespace SwitchPresentation.Controllers
         }
 
         // GET: HomeController1/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int Id)
         {
             return View();
         }
@@ -46,8 +48,10 @@ namespace SwitchPresentation.Controllers
         // POST: HomeController1/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(IFormCollection collection, int Id, string Name, string Location)
         {
+            GameCollection gameColl = new GameCollection();
+            gameColl.UpdateGame(Id, Name, Location);
             return View();
         }
 
@@ -62,7 +66,9 @@ namespace SwitchPresentation.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
         {
-                return View();
+            GameCollection gameColl = new GameCollection();
+            gameColl.DeleteGame(id);
+            return View();
         }
     }
 }

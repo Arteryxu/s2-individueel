@@ -12,36 +12,45 @@ namespace SwitchLogic
     {
         public List<Game> GetAllGames()
         {
+            GameDAL gameDAL = new GameDAL();
+            List<GameDTO> gameDTOs = gameDAL.GetAllGames();
             List<Game> games = new List<Game>();
-
-            using(MySqlConnection conn = GameDAL.GetConnection())
+            foreach (GameDTO gameDTO in gameDTOs)
             {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("select * from game", conn);
-                
-                using (MySqlDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        games.Add(new Game()
-                        {
-                            Id = Convert.ToInt32(reader["id"]),
-                            Name = reader["name"].ToString(),
-                            Location = reader["location"].ToString()
-                        });
-                    }
-                }
+                int gameId = gameDTO.Id;
+                string gameName = gameDTO.Name;
+                string gameLocation = gameDTO.Location;
+                games.Add(new Game { Id = gameId, Name = gameName, Location = gameLocation });
             }
             return games;
         }
         public void AddGame(string Name, string Location)
         {
-            using (MySqlConnection conn = GameDAL.GetConnection())
-            {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("INSERT INTO game VALUES(1,", conn);
-                cmd.ExecuteNonQuery();
-            }
+            GameDAL gameDAL = new GameDAL();
+            gameDAL.AddGame(Name, Location);
+        }
+        public void UpdateGame(int Id, string Name, string Location)
+        {
+            GameDAL gameDAL = new GameDAL();
+            gameDAL.UpdateGame(Id, Name, Location);
+        }
+
+        public void DeleteGame(int Id)
+        {
+            GameDAL gameDAL = new GameDAL();
+            gameDAL.DeleteGame(Id);
+        }
+        public Game GetDetails(int Id)
+        {
+            GameDAL gameDAL = new GameDAL();
+            Game game = new Game();
+            GameDTO gameDTO = gameDAL.GetDetails(Id);
+
+            game.Id = gameDTO.Id;
+            game.Name = gameDTO.Name;
+            game.Location = gameDTO.Location;
+
+            return game;
         }
     }
 }
