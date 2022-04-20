@@ -1,11 +1,13 @@
 ﻿using MySql.Data.MySqlClient;
+using SwitchDTO;
+using SwitchInterface;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
 namespace SwitchDAL
 {
-    public class GameDAL
+    public class GameDAL : IGameDAL
     {
         public static MySqlConnection GetConnection()
         {
@@ -19,7 +21,7 @@ namespace SwitchDAL
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT * FROM game", conn);
+                MySqlCommand cmd = new MySqlCommand("SELECT id, name, location FROM game", conn);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -79,7 +81,7 @@ namespace SwitchDAL
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT * FROM game WHERE Id = @Id", conn);
+                MySqlCommand cmd = new MySqlCommand("SELECT id, name, location FROM game WHERE Id = @Id", conn);
                 cmd.Parameters.AddWithValue("@Id", Id);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())

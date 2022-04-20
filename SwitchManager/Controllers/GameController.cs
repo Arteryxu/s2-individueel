@@ -2,25 +2,42 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using SwitchPresentation.Models;
+using SwitchInterface;
 
 namespace SwitchPresentation.Controllers
 {
     public class GameController : Controller
     {
+        GameCollection gameColl;
+        Game game;
+
+        public GameController(GameCollection gameColl, Game game)
+        {
+            this.gameColl = gameColl;
+            this.game = game;
+        }
         // GET: HomeController1
         public ActionResult Index()
         {
-            GameCollection gameColl = new GameCollection();
-            List<Game> games = gameColl.GetAllGames();
-            return View(games);
+            List<GameModel> games = gameColl.GetAllGames();
+            List<GameViewModel> gameViews = new List<GameViewModel>();
+            foreach (GameModel game in games)
+            {
+                int gameViewId = game.Id;
+                string gameViewName = game.Name;
+                string gameViewLocation = game.Location;
+                gameViews.Add(new GameViewModel( gameViewId, gameViewName, gameViewLocation));
+            }
+            return View(gameViews);
         }
 
         // GET: HomeController1/Details/5
         public ActionResult Details(int Id)
         {
-            GameCollection gameColl = new GameCollection();
-            Game game = gameColl.GetDetails(Id);
-            return View(game);
+            GameModel gameModel = game.GetDetails(Id);
+            GameViewModel gameDetails = new GameViewModel( gameModel.Id, gameModel.Name, gameModel.Location );
+            return View(gameDetails);
         }
 
         // GET: HomeController1/Create
@@ -34,7 +51,6 @@ namespace SwitchPresentation.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection, string Name, string Location)
         {
-            GameCollection gameColl = new GameCollection();
             gameColl.AddGame(Name, Location);
             return View();
         }
@@ -50,8 +66,7 @@ namespace SwitchPresentation.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(IFormCollection collection, int Id, string Name, string Location)
         {
-            GameCollection gameColl = new GameCollection();
-            gameColl.UpdateGame(Id, Name, Location);
+            game.UpdateGame(Id, Name, Location);
             return View();
         }
 
@@ -66,7 +81,6 @@ namespace SwitchPresentation.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
         {
-            GameCollection gameColl = new GameCollection();
             gameColl.DeleteGame(id);
             return View();
         }

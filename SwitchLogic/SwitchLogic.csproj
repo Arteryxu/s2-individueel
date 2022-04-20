@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SwitchDAL\SwitchDAL.csproj" />
+    <ProjectReference Include="..\SwitchInterface\SwitchInterface.csproj" />
   </ItemGroup>
 
 </Project>

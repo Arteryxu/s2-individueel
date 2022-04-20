@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SwitchDAL;
+using SwitchInterface;
+using SwitchLogic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +27,9 @@ namespace SwitchManager
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddTransient<IGameDAL, GameDAL>();
+            services.AddTransient<GameCollection>();
+            services.AddTransient<Game>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

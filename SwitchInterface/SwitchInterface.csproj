@@ -5,12 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MySql.Data" Version="8.0.28" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SwitchDTO\SwitchDTO.csproj" />
-    <ProjectReference Include="..\SwitchInterface\SwitchInterface.csproj" />
   </ItemGroup>
 
 </Project>

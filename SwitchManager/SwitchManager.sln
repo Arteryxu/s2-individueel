@@ -9,11 +9,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwitchPresentation", "Switc
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwitchDAL", "..\SwitchDAL\SwitchDAL.csproj", "{49183A66-B367-49F0-AAA9-BBEA567DCD7D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B9BDE327-72EE-4044-AA6C-7FC6904A47C1} = {B9BDE327-72EE-4044-AA6C-7FC6904A47C1}
+		{4D5A2628-D76C-41D4-B6CB-D350750E7442} = {4D5A2628-D76C-41D4-B6CB-D350750E7442}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwitchLogic", "..\SwitchLogic\SwitchLogic.csproj", "{AA10CFBE-3B09-41A7-A2AA-7E2218D1C76F}"
 	ProjectSection(ProjectDependencies) = postProject
-		{49183A66-B367-49F0-AAA9-BBEA567DCD7D} = {49183A66-B367-49F0-AAA9-BBEA567DCD7D}
+		{B9BDE327-72EE-4044-AA6C-7FC6904A47C1} = {B9BDE327-72EE-4044-AA6C-7FC6904A47C1}
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwitchInterface", "..\SwitchInterface\SwitchInterface.csproj", "{B9BDE327-72EE-4044-AA6C-7FC6904A47C1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4D5A2628-D76C-41D4-B6CB-D350750E7442} = {4D5A2628-D76C-41D4-B6CB-D350750E7442}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchDTO", "..\SwitchDTO\SwitchDTO.csproj", "{4D5A2628-D76C-41D4-B6CB-D350750E7442}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +44,14 @@ Global
 		{AA10CFBE-3B09-41A7-A2AA-7E2218D1C76F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA10CFBE-3B09-41A7-A2AA-7E2218D1C76F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA10CFBE-3B09-41A7-A2AA-7E2218D1C76F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9BDE327-72EE-4044-AA6C-7FC6904A47C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9BDE327-72EE-4044-AA6C-7FC6904A47C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9BDE327-72EE-4044-AA6C-7FC6904A47C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9BDE327-72EE-4044-AA6C-7FC6904A47C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D5A2628-D76C-41D4-B6CB-D350750E7442}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D5A2628-D76C-41D4-B6CB-D350750E7442}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D5A2628-D76C-41D4-B6CB-D350750E7442}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D5A2628-D76C-41D4-B6CB-D350750E7442}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

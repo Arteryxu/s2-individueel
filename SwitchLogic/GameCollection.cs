@@ -1,5 +1,5 @@
-﻿using MySql.Data.MySqlClient;
-using SwitchDAL;
+﻿using SwitchDTO;
+using SwitchInterface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,47 +10,40 @@ namespace SwitchLogic
 {
     public class GameCollection
     {
-        public List<Game> GetAllGames()
+        IGameDAL _gameDAL;
+
+        public GameCollection(IGameDAL gameDAL)
         {
-            GameDAL gameDAL = new GameDAL();
-            List<GameDTO> gameDTOs = gameDAL.GetAllGames();
-            List<Game> games = new List<Game>();
+            _gameDAL = gameDAL;
+        }
+
+        public List<GameModel> GetAllGames()
+        {
+            List<GameDTO> gameDTOs = _gameDAL.GetAllGames();
+            List<GameModel> games = new List<GameModel>();
             foreach (GameDTO gameDTO in gameDTOs)
             {
                 int gameId = gameDTO.Id;
                 string gameName = gameDTO.Name;
                 string gameLocation = gameDTO.Location;
-                games.Add(new Game { Id = gameId, Name = gameName, Location = gameLocation });
+                games.Add(new GameModel { Id = gameId, Name = gameName, Location = gameLocation });
             }
             return games;
         }
+
         public void AddGame(string Name, string Location)
         {
-            GameDAL gameDAL = new GameDAL();
-            gameDAL.AddGame(Name, Location);
-        }
-        public void UpdateGame(int Id, string Name, string Location)
-        {
-            GameDAL gameDAL = new GameDAL();
-            gameDAL.UpdateGame(Id, Name, Location);
+            _gameDAL.AddGame(Name, Location);
         }
 
         public void DeleteGame(int Id)
         {
-            GameDAL gameDAL = new GameDAL();
-            gameDAL.DeleteGame(Id);
+            _gameDAL.DeleteGame(Id);
         }
-        public Game GetDetails(int Id)
+
+        public void SortSwitchFirst()
         {
-            GameDAL gameDAL = new GameDAL();
-            Game game = new Game();
-            GameDTO gameDTO = gameDAL.GetDetails(Id);
 
-            game.Id = gameDTO.Id;
-            game.Name = gameDTO.Name;
-            game.Location = gameDTO.Location;
-
-            return game;
         }
     }
 }
