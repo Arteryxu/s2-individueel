@@ -19,12 +19,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwitchLogic", "..\SwitchLog
 		{B9BDE327-72EE-4044-AA6C-7FC6904A47C1} = {B9BDE327-72EE-4044-AA6C-7FC6904A47C1}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwitchInterface", "..\SwitchInterface\SwitchInterface.csproj", "{B9BDE327-72EE-4044-AA6C-7FC6904A47C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwitchInterfaces", "..\SwitchInterface\SwitchInterfaces.csproj", "{B9BDE327-72EE-4044-AA6C-7FC6904A47C1}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4D5A2628-D76C-41D4-B6CB-D350750E7442} = {4D5A2628-D76C-41D4-B6CB-D350750E7442}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchDTO", "..\SwitchDTO\SwitchDTO.csproj", "{4D5A2628-D76C-41D4-B6CB-D350750E7442}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwitchDTO", "..\SwitchDTO\SwitchDTO.csproj", "{4D5A2628-D76C-41D4-B6CB-D350750E7442}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

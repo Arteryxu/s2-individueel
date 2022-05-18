@@ -8,7 +8,7 @@ namespace SwitchInterface
         void AddGame(string Name, string Location);
         void DeleteGame(int Id);
         List<GameDTO> GetAllGames();
-        GameDTO GetDetails(int Id);
+        GameDTO GetDetails(int Id); 
         void UpdateGame(int Id, string Name, string Location);
     }
 }

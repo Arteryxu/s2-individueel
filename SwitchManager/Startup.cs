@@ -27,9 +27,9 @@ namespace SwitchManager
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddTransient<IGameDAL, GameDAL>();
-            services.AddTransient<GameCollection>();
-            services.AddTransient<Game>();
+            services.AddScoped<IGameDAL, GameDAL>();
+            services.AddScoped<GameCollection>();
+            services.AddScoped<Game>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

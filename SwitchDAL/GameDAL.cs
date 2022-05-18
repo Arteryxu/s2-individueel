@@ -9,7 +9,7 @@ namespace SwitchDAL
 {
     public class GameDAL : IGameDAL
     {
-        public static MySqlConnection GetConnection()
+        private static MySqlConnection GetConnection()
         {
             return new MySqlConnection("server=localhost;user=root;database=switch;password=123456789");
         }

@@ -10,7 +10,7 @@ namespace SwitchLogic
 {
     public class GameCollection
     {
-        IGameDAL _gameDAL;
+        private IGameDAL _gameDAL;
 
         public GameCollection(IGameDAL gameDAL)
         {

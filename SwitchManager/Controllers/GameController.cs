@@ -9,14 +9,15 @@ namespace SwitchPresentation.Controllers
 {
     public class GameController : Controller
     {
-        GameCollection gameColl;
-        Game game;
+        private GameCollection gameColl;
+        private Game game;
 
         public GameController(GameCollection gameColl, Game game)
         {
             this.gameColl = gameColl;
             this.game = game;
         }
+
         // GET: HomeController1
         public ActionResult Index()
         {
