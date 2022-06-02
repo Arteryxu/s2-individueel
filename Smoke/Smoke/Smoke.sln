@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32319.34
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmokeUI", "SmokeUI.csproj", "{2F078B48-513E-428E-ABC1-71CD770788CC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{66A29351-CA73-49F5-B104-40B34A85148C} = {66A29351-CA73-49F5-B104-40B34A85148C}
+		{30A7FAAA-7DAF-42EC-B533-7BA498B31561} = {30A7FAAA-7DAF-42EC-B533-7BA498B31561}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmokeLogic", "..\SmokeLogic\SmokeLogic.csproj", "{30A7FAAA-7DAF-42EC-B533-7BA498B31561}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BAEA302B-0A7D-4DCF-977E-3063A4F7B23F} = {BAEA302B-0A7D-4DCF-977E-3063A4F7B23F}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmokeDAL", "..\SmokeDAL\SmokeDAL.csproj", "{66A29351-CA73-49F5-B104-40B34A85148C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{18F11219-9E96-43D8-A183-E8A8CBC26C90} = {18F11219-9E96-43D8-A183-E8A8CBC26C90}
+		{BAEA302B-0A7D-4DCF-977E-3063A4F7B23F} = {BAEA302B-0A7D-4DCF-977E-3063A4F7B23F}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmokeInterfaces", "..\SmokeInterfaces\SmokeInterfaces.csproj", "{BAEA302B-0A7D-4DCF-977E-3063A4F7B23F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{18F11219-9E96-43D8-A183-E8A8CBC26C90} = {18F11219-9E96-43D8-A183-E8A8CBC26C90}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmokeDTOs", "..\SmokeDTOs\SmokeDTOs.csproj", "{18F11219-9E96-43D8-A183-E8A8CBC26C90}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F078B48-513E-428E-ABC1-71CD770788CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F078B48-513E-428E-ABC1-71CD770788CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F078B48-513E-428E-ABC1-71CD770788CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F078B48-513E-428E-ABC1-71CD770788CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30A7FAAA-7DAF-42EC-B533-7BA498B31561}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30A7FAAA-7DAF-42EC-B533-7BA498B31561}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30A7FAAA-7DAF-42EC-B533-7BA498B31561}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30A7FAAA-7DAF-42EC-B533-7BA498B31561}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66A29351-CA73-49F5-B104-40B34A85148C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66A29351-CA73-49F5-B104-40B34A85148C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66A29351-CA73-49F5-B104-40B34A85148C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66A29351-CA73-49F5-B104-40B34A85148C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAEA302B-0A7D-4DCF-977E-3063A4F7B23F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAEA302B-0A7D-4DCF-977E-3063A4F7B23F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAEA302B-0A7D-4DCF-977E-3063A4F7B23F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAEA302B-0A7D-4DCF-977E-3063A4F7B23F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18F11219-9E96-43D8-A183-E8A8CBC26C90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18F11219-9E96-43D8-A183-E8A8CBC26C90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18F11219-9E96-43D8-A183-E8A8CBC26C90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18F11219-9E96-43D8-A183-E8A8CBC26C90}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {23D8DDDC-5C44-4C00-9917-6FD62E07602C}
+	EndGlobalSection
+EndGlobal
