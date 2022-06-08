@@ -28,8 +28,14 @@ namespace Smoke
         {
             services.AddControllersWithViews();
             services.AddTransient<IPropertyDAL, PropertyDAL>();
+            services.AddTransient<IGameDAL, GameDAL>();
+            services.AddTransient<IUserDAL, UserDAL>();
+
             services.AddTransient<PropertyCollection>();
             services.AddTransient<PropertyHandler>();
+            services.AddTransient<UserCollection>();
+            services.AddTransient<UserHandler>();
+
             services.AddSingleton<IConfiguration>(Configuration);
         }
 

@@ -114,6 +114,7 @@ namespace SmokeDAL
                         propertyDTO.name = reader["propertyName"].ToString();
                         propertyDTO.value = reader["propertyValue"].ToString();
                         propertyDTO.type = reader["propertyType"].ToString();
+                        cmd.ExecuteNonQuery();
                     }
                 }
             }

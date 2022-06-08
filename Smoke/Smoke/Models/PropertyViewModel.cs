@@ -1,17 +1,17 @@
-﻿
+﻿using SmokeLogic;
 
 namespace SmokeUI.Models
 {
     public class PropertyViewModel
     {
-        public PropertyViewModel(int Id, int? gameId, int? parentId, string name, string value, string type)
+        public PropertyViewModel(Property property)
         {
-            this.Id = Id;
-            this.gameId = gameId;
-            this.parentId = parentId;
-            this.name = name;
-            this.value = value;
-            this.type = type;
+            Id = property.Id;
+            gameId = property.gameId;
+            parentId = property.parentId;
+            name = property.name;
+            value = property.value;
+            type = property.type;
         }
 
         public int Id { get; set; }

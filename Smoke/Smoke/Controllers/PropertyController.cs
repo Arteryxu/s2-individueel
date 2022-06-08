@@ -22,15 +22,10 @@ namespace SmokeUI.Controllers
         {
             List<Property> properties = propertyColl.GetAll();
             List<PropertyViewModel> propertyViews = new List<PropertyViewModel>();
+
             foreach (Property property in properties)
             {
-                int propViewId = property.Id;
-                int? propViewGameId = property.gameId;
-                int? propViewParentId = property.parentId;
-                string propViewName = property.name;
-                string propViewValue = property.value;
-                string propViewType = property.type;
-                propertyViews.Add(new PropertyViewModel(propViewId, propViewGameId, propViewParentId, propViewName, propViewValue, propViewType));
+                propertyViews.Add(new PropertyViewModel(property));
             }
             return View(propertyViews);
         }
@@ -38,9 +33,7 @@ namespace SmokeUI.Controllers
         // GET: PropertyController/Details/5
         public ActionResult Details(int Id)
         {
-            Property property = propertyHandler.GetDetails(Id);
-            PropertyViewModel propertyDetails = new PropertyViewModel(property.Id, property.gameId, property.parentId, property.name, property.value, property.type);
-            return View(propertyDetails);
+            return View(new PropertyViewModel(propertyHandler.GetDetails(Id)));
         }
 
         // GET: PropertyController/Create
