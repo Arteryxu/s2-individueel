@@ -13,17 +13,13 @@ namespace SmokeUI.Models
             Email = user.Email;
             foreach(Game game in user.Games)
             {
-                Games.Add(new GameViewModel()
-                {
-                    Id = game.Id,
-                    Name = game.Name
-                });
+                Games.Add(new GameViewModel(game));
             }
         }
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string? Name { get; set; }
         public string? Password { get; set; }
         public string? Email { get; set; }
-        public List<GameViewModel> Games { get; set; }
+        public List<GameViewModel> Games = new List<GameViewModel>();
     }
 }

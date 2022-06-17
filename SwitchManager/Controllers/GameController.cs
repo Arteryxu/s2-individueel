@@ -71,13 +71,11 @@ namespace SwitchPresentation.Controllers
             return View();
         }
 
-        // GET: HomeController1/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: HomeController1/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

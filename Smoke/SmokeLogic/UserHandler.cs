@@ -19,48 +19,17 @@ namespace SmokeLogic
 
         public void UpdateUser(int Id, string Name, string Email, string Password)
         {
-
             _userDAL.UpdateUser(Id, Name);
         }
 
         public User GetUserDetails(int UserId)
         {
-            User user = new User();
-            UserDTO userDTO = _userDAL.GetUserDetails(UserId);
-
-            user.Id = userDTO.Id;
-            user.Name = userDTO.Name;
-            //user.Email = userDTO.Email;
-            //user.Password = userDTO.Password;
-
-            return user;
+            return new User(_userDAL.GetUserDetails(UserId));
         }
+
         public User GetUserGameDetails(int UserId, int GameId)
         {
-            User userGame = new User();
-            UserDTO userDTO = _userDAL.GetUserGameDetails(UserId, GameId);
-
-            userGame = DTOToUserGame(userDTO);
-
-            return userGame;
-        }
-
-        public User DTOToUserGame(UserDTO userDTO)
-        {
-            User userGame = new User();
-            List<Game> games = new List<Game>();
-
-            userGame.Id = userDTO.Id;
-            foreach (GameDTO gameDTO in userDTO.Games)
-            {
-                games.Add(new Game()
-                {
-                    Id = gameDTO.Id,
-                    Name = gameDTO.Name
-                });
-            }
-
-            return userGame;
+            return new User(_userDAL.GetUserGameDetails(UserId, GameId));
         }
     }
 }

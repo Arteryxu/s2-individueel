@@ -1,0 +1,52 @@
+﻿@model IEnumerable<SmokeUI.Models.UserViewModel>
+
+@{
+    ViewData["Title"] = "UserGameIndex";
+}
+
+<h1>UserGameIndex</h1>
+
+<p>
+    <a asp-action="AddUserGame">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Games[0].Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Games[0].Name)
+            </th>
+            <td>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) 
+{
+    @if (item.Games[0].Id != null)
+            {
+                <tr>
+                    <td>
+                        @item.Games[0].Id
+                    </td>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.Games[0].Name
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "EditUserGame", new { GameId=item.Games[0].Id, UserId=item.Id }) |
+                        @Html.ActionLink("Details", "UserGameDetails", new { GameId=item.Games[0].Id, UserId=item.Id }) |
+                        @Html.ActionLink("Delete", "DeleteUserGame", new { GameId=item.Games[0].Id, UserId=item.Id })
+                    </td>
+                </tr>
+            }  
+}
+    </tbody>
+</table>

@@ -17,9 +17,32 @@ namespace SmokeUI.Controllers
             this.userHandler = propertyHandler;
         }
         // GET: UserController
-        public ActionResult GetUsers()
+        public ActionResult UserIndex()
         {
             List<User> users = userColl.GetAllUsers();
+            List<UserViewModel> userViews = new List<UserViewModel>();
+
+            foreach (User user in users)
+            {
+                userViews.Add(new UserViewModel(user));
+            } 
+            return View(userViews);
+        }
+
+        public ActionResult UserGameIndex()
+        {
+            List<User> users = userColl.GetAllUserGames();
+            List<UserViewModel> userViews = new List<UserViewModel>();
+
+            foreach (User user in users)
+            {
+                userViews.Add(new UserViewModel(user));
+            }
+            return View(userViews);
+        }
+        public ActionResult MyUserGameIndex(int UserId)
+        {
+            List<User> users = userColl.GetUserGames(UserId);
             List<UserViewModel> userViews = new List<UserViewModel>();
 
             foreach (User user in users)
@@ -30,13 +53,23 @@ namespace SmokeUI.Controllers
         }
 
         // GET: UserController/Details/5
-        public ActionResult Details(int UserId)
+        public ActionResult UserDetails(int UserId)
         {
             return View(new UserViewModel(userHandler.GetUserDetails(UserId)));
         }
 
+        public ActionResult UserGameDetails(int UserId, int GameId)
+        {
+            return View(new UserViewModel(userHandler.GetUserGameDetails(UserId, GameId)));
+        }
+
         // GET: UserController/Create
-        public ActionResult Create()
+        public ActionResult AddUser()
+        {
+            return View();
+        }
+
+        public ActionResult AddUserGame()
         {
             return View();
         }
@@ -44,19 +77,32 @@ namespace SmokeUI.Controllers
         // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateUser(IFormCollection collection, UserViewModel UserViewModel, int GameId)
+        public ActionResult AddUser(IFormCollection collection, int id, string name, string email, string password)
         {
             User user = new User();
-            user.Id = UserViewModel.Id;
-            user.Name = UserViewModel.Name;
-            user.Email = UserViewModel.Email;
-            user.Password = UserViewModel.Password;
-            userColl.AddUser(user, GameId);
-            return View();
+            user.Id = id;
+            user.Name = name;
+            user.Email = email;
+            user.Password = password;
+            userColl.AddUser(user);
+            List<UserViewModel> users = new List<UserViewModel>();
+            foreach(var item in userColl.GetAllUsers())
+            {
+                users.Add(new UserViewModel(item));
+            }
+            return RedirectToAction(nameof(UserIndex));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddUserGame(IFormCollection collection, User User, int GameId)
+        {
+            userColl.AddUserGame(GameId, User.Id);
+            return RedirectToAction(nameof(UserGameIndex));
         }
 
         // GET: UserController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult EditUser(int id)
         {
             return View();
         }
@@ -67,32 +113,33 @@ namespace SmokeUI.Controllers
         public ActionResult EditUser(int Id, string Name, string Email, string Password, IFormCollection collection)
         {
             userHandler.UpdateUser(Id, Name, Email, Password);
-            return View();
+            return RedirectToAction(nameof(UserIndex));
         }
 
-        // GET: UserController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult DeleteUser([FromQuery]int UserId)
         {
-            return View();
+            return View(new UserViewModel(userHandler.GetUserDetails(UserId)));
         }
 
-        // POST: UserController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteUser(int GameId, int UserId, UserViewModel UserViewModel, IFormCollection collection)
+        public ActionResult DeleteUser([FromForm] int UserId, IFormCollection collection)
         {
-            User user = new User();
-            foreach (GameViewModel gameViewModel in UserViewModel.Games)
-            {
-                user.Games.Add(new Game()
-                {
-                    Id = gameViewModel.Id,
-                    Name = gameViewModel.Name
-                });
-            }
+            userColl.DeleteUser(UserId);
+            return RedirectToAction(nameof(UserIndex));
+        }
 
-            userColl.DeleteUser(GameId, UserId, user);
-            return View();
+        public ActionResult DeleteUserGame([FromQuery] int UserId, [FromQuery] int GameId)
+        {
+            return View(new UserViewModel(userHandler.GetUserGameDetails(GameId, UserId)));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteUserGame([FromForm] int UserId, [FromForm] int GameId, IFormCollection collection)
+        {
+            userColl.DeleteUserGame(GameId, UserId);
+            return RedirectToAction(nameof(UserGameIndex));
         }
     }
 }

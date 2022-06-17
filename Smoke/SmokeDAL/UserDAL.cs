@@ -41,7 +41,7 @@ namespace SmokeDAL
 
                         users.Add(new UserDTO()
                         {
-                            Id = Convert.ToInt32(reader["usergame.UserId"]),
+                            Id = Convert.ToInt32(reader["Id"]),
                             Name = reader["Name"].ToString(),
                             Email = reader["Email"].ToString(),
                             Password = reader["Password"].ToString()
@@ -54,28 +54,31 @@ namespace SmokeDAL
 
         public List<UserDTO> GetAllUserGames()
         {
-            List<GameDTO> gameDTOs = new List<GameDTO>();
+
             List<UserDTO> userDTOs = new List<UserDTO>();
+
 
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
-                //MySqlCommand cmd = new MySqlCommand("SELECT Id, Name, usergame.UserId FROM game LEFT JOIN usergame ON game.Id = usergame.gameId WHERE ", conn);
                 MySqlCommand cmd = new MySqlCommand
-                    ("SELECT Id, usergame.GameId, game.Name FROM user LEFT JOIN usergame ON user.Id = usergame.UserId LEFT JOIN game ON usergame.GameId = game.Id", conn);
+                    ("SELECT user.Id, user.Name as userName, usergame.GameId, game.Name as gameName FROM user LEFT JOIN usergame ON user.Id = usergame.UserId " +
+                    "LEFT JOIN game ON usergame.GameId = game.Id", conn);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
+                        List<GameDTO> gameDTOs = new List<GameDTO>();
                         gameDTOs.Add(new GameDTO()
                         {
-                            Id = Convert.ToInt32(reader["Id"]),
-                            Name = reader["Name"].ToString()
+                            Id = reader["GameId"] == DBNull.Value ? null : Convert.ToInt32(reader["GameId"]),
+                            Name = reader["gameName"].ToString()
                         });
                         userDTOs.Add(new UserDTO()
                         {
-                            Id = Convert.ToInt32(reader["usergame.UserId"]),
+                            Id = Convert.ToInt32(reader["Id"]),
+                            Name = reader["userName"].ToString(),
                             Games = gameDTOs
                         });
                     }
@@ -86,14 +89,13 @@ namespace SmokeDAL
 
         public List<UserDTO> GetUserGames(int UserId)
         {
-            List<GameDTO> gameDTOs = new List<GameDTO>();
             List<UserDTO> userDTOs = new List<UserDTO>();
 
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand
-                    ("SELECT Id, usergame.GameId, game.Name FROM user LEFT JOIN usergame ON user.Id = usergame.UserId LEFT JOIN game ON usergame.GameId = game.Id WHERE Id = @UserId", conn);
+                    ("SELECT user.Id as UserId, usergame.GameId as GameId, game.Name FROM user LEFT JOIN usergame ON user.Id = usergame.UserId LEFT JOIN game ON usergame.GameId = game.Id WHERE UserId = @UserId", conn);
 
                 cmd.Parameters.AddWithValue("@UserId", UserId);
 
@@ -101,14 +103,15 @@ namespace SmokeDAL
                 {
                     while (reader.Read())
                     {
+                        List<GameDTO> gameDTOs = new List<GameDTO>();
                         gameDTOs.Add(new GameDTO()
                         {
-                            Id = Convert.ToInt32(reader["Id"]),
+                            Id = Convert.ToInt32(reader["GameId"]),
                             Name = reader["Name"].ToString()
                         });
                         userDTOs.Add(new UserDTO()
                         {
-                            Id = Convert.ToInt32(reader["usergame.UserId"]),
+                            Id = Convert.ToInt32(reader["UserId"]),
                             Games = gameDTOs
                         });
                     }
@@ -117,40 +120,37 @@ namespace SmokeDAL
             return userDTOs;
         }
 
-        public void AddUser(UserDTO userDTO, int gameId)
+        public void AddUser(UserDTO userDTO)
         {
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
 
-                MySqlCommand cmd1 = new MySqlCommand("INSERT INTO user(id, name, email, password) VALUES(@Id, @Name, @Email, @Password)", conn);
+                MySqlCommand cmd = new MySqlCommand("INSERT INTO user(name, email, password) VALUES(@Name, @Email, @Password)", conn);
 
-                MySqlCommand cmd2 = new MySqlCommand("INSERT INTO usergame(gameId, UserId) VALUES(@GameId, @UserId)", conn);
+                cmd.Parameters.AddWithValue("@Name", userDTO.Name);
+                cmd.Parameters.AddWithValue("@Email", userDTO.Email);
+                cmd.Parameters.AddWithValue("@Password", userDTO.Password);
+                cmd.ExecuteNonQuery();
 
-                cmd1.Parameters.AddWithValue("@Id", userDTO.Id);
-                cmd1.Parameters.AddWithValue("@Name", userDTO.Name);
-                cmd1.Parameters.AddWithValue("@Email", userDTO.Email);
-                cmd1.Parameters.AddWithValue("@Password", userDTO.Password);
-                cmd1.ExecuteNonQuery();
+                //int userId = Convert.ToInt32(cmd1.LastInsertedId);
 
-                int userId = Convert.ToInt32(cmd1.LastInsertedId);
-
-                foreach (var item in userDTO.Games)
-                {
-                    cmd2.Parameters.AddWithValue("@GameId", gameId);
-                    cmd2.Parameters.AddWithValue("@UserId", userId);
-                    cmd2.ExecuteNonQuery();
-                }
+                //foreach (var item in userDTO.Games)
+                //{
+                //    cmd2.Parameters.AddWithValue("@GameId", gameId);
+                //    cmd2.Parameters.AddWithValue("@UserId", userId);
+                //    cmd2.ExecuteNonQuery();
+                //}
             }
         }
 
-        public void AddUserGame(int GameId, int UserId)
+        public void AddUserGame(int GameId, int? UserId)
         {
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
 
-                MySqlCommand cmd = new MySqlCommand("INSERT INTO usergame(gameId, UserId) VALUES(@GameId, @UserId)", conn);
+                MySqlCommand cmd = new MySqlCommand("INSERT INTO usergame(gameId, userId) VALUES(@GameId, @UserId)", conn);
 
                 cmd.Parameters.AddWithValue("@GameId", GameId);
                 cmd.Parameters.AddWithValue("@UserId", UserId);
@@ -172,34 +172,30 @@ namespace SmokeDAL
             }
         }
 
-        public void DeleteUser(int GameId, int UserId, UserDTO userDTO)
+        public void DeleteUser(int UserId)
         {
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
 
-                MySqlCommand cmd1 = new MySqlCommand("DELETE FROM user WHERE userId = @Userid", conn);
-                MySqlCommand cmd2 = new MySqlCommand("DELETE FROM usergame WHERE gameId = @GameID, userId = @UserId", conn);
+                MySqlCommand cmd1 = new MySqlCommand("DELETE FROM user WHERE Id = @Userid", conn);
+                MySqlCommand cmd2 = new MySqlCommand("DELETE FROM usergame WHERE userId = @UserId", conn);
 
-                cmd1.Parameters.AddWithValue("@GameId", GameId);
+                cmd1.Parameters.AddWithValue("@UserId", UserId);
                 cmd1.ExecuteNonQuery();
 
-                foreach (GameDTO Game in userDTO.Games)
-                {
-                    cmd2.Parameters.AddWithValue("@GameId", GameId);
-                    cmd2.Parameters.AddWithValue("@UserId", UserId);
-                    cmd2.ExecuteNonQuery();
-                }
+                cmd2.Parameters.AddWithValue("@UserId", UserId);
+                cmd2.ExecuteNonQuery();
             }
         }
 
-        public void DeleteUserGame(int GameId, int UserId)
+        public void DeleteUserGame(int? GameId, int? UserId)
         {
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
 
-                MySqlCommand cmd = new MySqlCommand("DELETE FROM usergame WHERE gameId = @GameId, userId = @UserId", conn);
+                MySqlCommand cmd = new MySqlCommand("DELETE FROM usergame WHERE gameId = @GameId AND userId = @UserId", conn);
 
                 cmd.Parameters.AddWithValue("@GameId", GameId);
                 cmd.Parameters.AddWithValue("@UserId", UserId);
@@ -215,7 +211,7 @@ namespace SmokeDAL
             {
                 conn.Open();
 
-                MySqlCommand cmd = new MySqlCommand("SELECT gameId, userId, game.GameName FROM user WHERE userId = @UserId", conn);
+                MySqlCommand cmd = new MySqlCommand("SELECT Id, Name, Email, Password FROM user WHERE Id = @UserId", conn);
 
                 cmd.Parameters.AddWithValue("@UserId", UserId);
 
@@ -223,8 +219,8 @@ namespace SmokeDAL
                 {
                     while (reader.Read())
                     {
-                        userDTO.Id = Convert.ToInt32(reader["propertyId"]);
-                        userDTO.Name = reader["propertyName"].ToString();
+                        userDTO.Id = Convert.ToInt32(reader["uId"]);
+                        userDTO.Name = reader["Name"].ToString();
                     }
                 }
             }
@@ -240,20 +236,24 @@ namespace SmokeDAL
             {
                 conn.Open();
 
-                MySqlCommand cmd = new MySqlCommand("SELECT gameId, userId, game.name FROM usergame WHERE gameId = @GameId, userId = @UserId", conn);
+                MySqlCommand cmd = new MySqlCommand("SELECT gameId, userId, game.Name FROM usergame LEFT JOIN game ON usergame.GameId = game.Id WHERE gameId = @GameId AND userId = @UserId", conn);
 
                 cmd.Parameters.AddWithValue("@GameId", GameId);
                 cmd.Parameters.AddWithValue("@UserId", UserId);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
-                    gameDTOs.Add(new GameDTO()
+                    while (reader.Read())
                     {
-                        Id = Convert.ToInt32(reader["gameId"]),
-                        Name = reader["game.name"].ToString()
-                    });
-                    userDTO.Id = Convert.ToInt32(reader["userId"]);
-                    userDTO.Games = gameDTOs;
+                        gameDTOs.Add(new GameDTO()
+                        {
+                            Id = Convert.ToInt32(reader["gameId"]),
+                            Name = reader["Name"].ToString()
+                        });
+                        userDTO.Id = Convert.ToInt32(reader["userId"]);
+                        userDTO.Games = gameDTOs;
+                    }
+
                 }
             }
             return userDTO;

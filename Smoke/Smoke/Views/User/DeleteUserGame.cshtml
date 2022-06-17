@@ -1,0 +1,34 @@
+﻿@model SmokeUI.Models.UserViewModel
+
+@{
+    ViewData["Title"] = "DeleteUserGame";
+}
+
+<h1>DeleteUserGame</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>UserViewModel</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.LabelFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.LabelFor(model => model.Games[0].Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Games[0].Name)
+        </dd>
+    </dl>
+    
+    <form asp-action="DeleteUserGame">
+        <input name="UserId" value="@Html.DisplayFor(model => model.Id)" style="display:none;" />
+        <input name="GameId" value="@Html.DisplayFor(model => model.Games[0].Id)" style="display:none;" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="UserGameIndex">Back to List</a>
+    </form>
+</div>

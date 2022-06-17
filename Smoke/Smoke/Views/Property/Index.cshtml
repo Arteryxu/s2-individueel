@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Properties</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -16,12 +16,15 @@
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.parentId)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.name)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.value)
             </th>
-
+ 
             <th></th>
         </tr>
     </thead>
@@ -32,6 +35,9 @@
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.parentId)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.name)
             </td>
             <td>
@@ -40,7 +46,7 @@
 
             <td>
                 @Html.ActionLink("Edit", "Edit", new { Id=item.Id }) |
-                @Html.ActionLink("Details", "Details", new { Id=item.Id }) |
+                @Html.ActionLink("Details", "Details", new { PropertyId=item.Id, ParentId=item.parentId }) |
                 @Html.ActionLink("Delete", "Delete", new { Id=item.Id })
             </td>
         </tr>

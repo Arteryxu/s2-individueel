@@ -24,20 +24,23 @@ namespace SmokeLogic
             List<Property> properties = new List<Property>();
             foreach (PropertyDTO propertyDTO in propertyDTOs)
             {
-                int Id = propertyDTO.Id;
-                int? gameId = propertyDTO.gameId;
-                int? parentId = propertyDTO.parentId;
-                string name = propertyDTO.name;
-                string value = propertyDTO.value;
-                string type = propertyDTO.type;
-                properties.Add(new Property { Id = Id, gameId = gameId, parentId = parentId, name = name, value = value, type = type });
+                properties.Add(new Property(propertyDTO));
             }
             return properties;
         }
 
-        public void Add(int? GameId, int? ParentId, string Name, string Value, string PropertyType)
+        public void Add(Property property)
         {
-            _propertyDAL.Add(GameId, ParentId, Name, Value, PropertyType);
+            PropertyDTO propertyDTO = new PropertyDTO();
+            
+            propertyDTO.gameId = property.gameId;
+            propertyDTO.userId = property.userId;
+            propertyDTO.parentId = property.parentId;
+            propertyDTO.name = property.name;
+            propertyDTO.value = property.value;
+            propertyDTO.type = property.type;
+
+            _propertyDAL.Add(propertyDTO);
         }
 
         public void Delete(int Id)

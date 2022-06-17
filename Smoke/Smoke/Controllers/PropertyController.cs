@@ -31,9 +31,17 @@ namespace SmokeUI.Controllers
         }
 
         // GET: PropertyController/Details/5
-        public ActionResult Details(int Id)
+        public ActionResult Details(int PropertyId, int ParentId)
         {
-            return View(new PropertyViewModel(propertyHandler.GetDetails(Id)));
+            List<Property> properties = propertyHandler.GetDetails(PropertyId, ParentId);
+            List<PropertyViewModel> propertyViews = new List<PropertyViewModel>();
+
+            foreach (Property property in properties)
+            {
+                propertyViews.Add(new PropertyViewModel(property));
+            }
+
+            return View(propertyViews);
         }
 
         // GET: PropertyController/Create
@@ -45,9 +53,9 @@ namespace SmokeUI.Controllers
         // POST: PropertyController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection, int? GameId, int? ParentId, string Name, string Value, string propertyType)
+        public ActionResult Create(IFormCollection collection, Property property)
         {
-            propertyColl.Add(GameId, ParentId, Name, Value, propertyType);
+            propertyColl.Add(property);
             return View();
         }
 
@@ -60,7 +68,7 @@ namespace SmokeUI.Controllers
         // POST: PropertyController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int Id, int? GameId, int? ParentId, string Name, string Value, string PropertyType, IFormCollection collection)
+        public ActionResult Edit(int Id, int GameId, int? ParentId, string Name, string Value, string PropertyType, IFormCollection collection)
         {
             propertyHandler.Update(Id, GameId, ParentId, Name, Value, PropertyType);
             return View();
@@ -69,10 +77,13 @@ namespace SmokeUI.Controllers
         // GET: PropertyController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            List<Property> properties = propertyHandler.GetDetails(id, null);
+            PropertyViewModel propertyViewModel = new PropertyViewModel(properties[0]);
+
+            return View(propertyViewModel);
         }
 
-        // POST: PropertyController/Delete/5
+            // POST: PropertyController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int Id, IFormCollection collection)

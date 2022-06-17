@@ -27,6 +27,7 @@ namespace Smoke
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
             services.AddTransient<IPropertyDAL, PropertyDAL>();
             services.AddTransient<IGameDAL, GameDAL>();
             services.AddTransient<IUserDAL, UserDAL>();

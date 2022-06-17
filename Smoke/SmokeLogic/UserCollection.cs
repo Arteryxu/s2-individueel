@@ -28,7 +28,7 @@ namespace SmokeLogic
                 string Email = userDTO.Email;
                 string Password = userDTO.Password;
 
-                users.Add(new User { Id = Id, Name = Name, Email = Email, Password = Password });
+                users.Add(new User(userDTO) { Id = Id, Name = Name, Email = Email, Password = Password });
             }
             return users;
         }
@@ -46,7 +46,7 @@ namespace SmokeLogic
                     games.Add(new Game { Id = gameDTO.Id, Name = gameDTO.Name });
                 }
 
-                users.Add(new User { Id = Id, Games = games });
+                users.Add(new User(userDTO) { Id = Id, Games = games });
             }
             return users;
         }
@@ -64,18 +64,20 @@ namespace SmokeLogic
                     games.Add(new Game { Id = gameDTO.Id, Name = gameDTO.Name });
                 }
 
-                users.Add(new User { Id = Id, Games = games });
+                users.Add(new User(userDTO) { Id = Id, Games = games });
             }
             return users;
         }
 
-        public void AddUser(User user, int gameId)
+        public void AddUser(User user)
         {
             UserDTO userDTO = new UserDTO();
+            userDTO.Id = user.Id;
+            userDTO.Name = user.Name;
+            userDTO.Email = user.Email;
+            userDTO.Password = user.Password;
 
-            userDTO = UserToDTO(user);
-
-            _userDAL.AddUser(userDTO, gameId);
+            _userDAL.AddUser(userDTO);
         }
 
         public void AddUserGame(int GameId, int UserId)
@@ -83,41 +85,14 @@ namespace SmokeLogic
             _userDAL.AddUserGame(GameId, UserId);
         }
 
-        public void DeleteUser(int GameId, int UserId, User user)
+        public void DeleteUser(int UserId)
         {
-            UserDTO userDTO = new UserDTO();
-
-            userDTO = UserToDTO(user);
-
-            _userDAL.DeleteUser(GameId, UserId, userDTO);
+            _userDAL.DeleteUser(UserId);
         }
 
-        public void DeleteUserGame(int GameId, int UserId)
+        public void DeleteUserGame(int? GameId, int? UserId)
         {
             _userDAL.DeleteUserGame(GameId, UserId);
-        }
-
-        public UserDTO UserToDTO(User user)
-        {
-            UserDTO userDTO = new UserDTO();
-            List<GameDTO> gameDTOs = new List<GameDTO>();
-
-            foreach(Game game in user.Games)
-            {
-                gameDTOs.Add(new GameDTO()
-                {
-                    Id = game.Id,
-                    Name = game.Name
-                });
-            }
-
-            userDTO.Id = user.Id;
-            userDTO.Name = user.Name;
-            userDTO.Email = user.Email;
-            userDTO.Password = user.Password;
-            userDTO.Games = gameDTOs;
-
-            return userDTO;
         }
     }
 }

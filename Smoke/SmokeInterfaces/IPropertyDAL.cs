@@ -5,10 +5,11 @@ namespace SmokeInterfaces
 {
     public interface IPropertyDAL
     {
-        void Add(int? GameId, int? ParentId, string Name, string Value, string propertyType);
+        void Add(PropertyDTO propertyDTO);
         void Delete(int Id);
         List<PropertyDTO> GetAll();
-        PropertyDTO GetDetails(int Id);
-        void Update(int Id, int? GameId, int? ParentId, string name, string Value, string propertyType);
+        List<PropertyDTO> GetGameProperties();
+        List<PropertyDTO> GetDetails(int PropertyId, int? ParentId);
+        void Update(int Id, int GameId, int? ParentId, string name, string Value, string propertyType);
     }
 }

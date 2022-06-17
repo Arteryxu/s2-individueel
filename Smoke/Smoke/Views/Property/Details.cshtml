@@ -1,4 +1,4 @@
-﻿@model SmokeUI.Models.PropertyViewModel
+﻿@model IEnumerable<SmokeUI.Models.PropertyViewModel>
 
 @{
     ViewData["Title"] = "Details";
@@ -9,46 +9,80 @@
 <div>
     <h4>PropertyViewModel</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.gameId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.gameId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.parentId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.parentId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.value)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.value)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.type)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.type)
-        </dd>
-    </dl>
+   
+<dl class="row">
+    <dt class = "col-sm-2">
+        @Html.DisplayNameFor(model => model.Id)
+    </dt>
+    <dd class = "col-sm-10">
+        @Html.DisplayFor(model => model.First().Id)
+    </dd>
+    <dt class = "col-sm-2">
+        @Html.DisplayNameFor(model => model.name)
+    </dt>
+    <dd class = "col-sm-10">
+        @Html.DisplayFor(model => model.First().name)
+    </dd>
+    <dt class = "col-sm-2">
+        @Html.DisplayNameFor(model => model.value)
+    </dt>
+    <dd class = "col-sm-10">
+        @Html.DisplayFor(model => model.First().value)
+    </dd>
+    <dt class = "col-sm-2">
+        @Html.DisplayNameFor(model => model.type)
+    </dt>
+    <dd class = "col-sm-10">
+        @Html.DisplayFor(model => model.First().type)
+    </dd>
+</dl>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.parentId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.value)
+            </th>
+ 
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+    if (item.Id != Model.First().Id)
+    {             
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.parentId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.value)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { Id=item.Id }) |
+            </td>
+        </tr>        
+    }
+}
+    </tbody>
+</table>
 </div>
+
 <div>
-    @Html.ActionLink("Edit", "Edit", new { Id=Model.Id }) |
     <a asp-action="Index">Back to List</a>
 </div>

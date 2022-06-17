@@ -32,7 +32,7 @@ namespace SmokeDAL
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT propertyId, gameId, parentId, propertyName, propertyValue FROM property", conn);
+                MySqlCommand cmd = new MySqlCommand("SELECT propertyId, gameId, userId, parentId, propertyName, propertyValue FROM property", conn);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -41,7 +41,8 @@ namespace SmokeDAL
                         propertyDTOs.Add(new PropertyDTO()
                         {
                             Id = Convert.ToInt32(reader["propertyId"]),
-                            gameId = reader["gameId"] == DBNull.Value ? null : Convert.ToInt32(reader["gameId"]),
+                            gameId = Convert.ToInt32(reader["gameId"]),
+                            userId = Convert.ToInt32(reader["userId"]),
                             parentId = reader["parentId"] == DBNull.Value ? null : Convert.ToInt32(reader["parentId"]),
                             name = reader["propertyName"].ToString(),
                             value = reader["propertyValue"].ToString()
@@ -53,27 +54,59 @@ namespace SmokeDAL
             return propertyDTOs;
         }
 
-        public void Add(int? GameId, int? ParentId, string Name, string Value, string propertyType)
+        public List<PropertyDTO> GetGameProperties()
+        {
+            List<PropertyDTO> propertyDTOs = new List<PropertyDTO>();
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SELECT propertyId, gameId, userId, parentId, propertyName, propertyValue FROM property", conn);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        propertyDTOs.Add(new PropertyDTO()
+                        {
+                            Id = Convert.ToInt32(reader["propertyId"]),
+                            gameId = Convert.ToInt32(reader["gameId"]),
+                            userId = Convert.ToInt32(reader["userId"]),
+                            parentId = reader["parentId"] == DBNull.Value ? null : Convert.ToInt32(reader["parentId"]),
+                            name = reader["propertyName"].ToString(),
+                            value = reader["propertyValue"].ToString()
+                            //Location = reader["location"].ToString()
+                        });
+                    }
+                }
+            }
+            return propertyDTOs;
+        }
+
+        public void Add(PropertyDTO propertyDTO)
         {
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("INSERT INTO property(propertyId, gameId, parentId, propertyName, propertyValue, propertyType) VALUES(0, @GameId, @ParentId, @Name, @Value, @Type)", conn);
-                cmd.Parameters.AddWithValue("@GameId", GameId);
-                cmd.Parameters.AddWithValue("@ParentId", ParentId);
-                cmd.Parameters.AddWithValue("@Name", Name);
-                cmd.Parameters.AddWithValue("@Value", Value);
-                cmd.Parameters.AddWithValue("@Type", propertyType);
+                MySqlCommand cmd = new MySqlCommand("INSERT INTO property(propertyId, gameId, userId, parentId, propertyName, propertyValue, propertyType) " +
+                    "VALUES(0, @GameId, @UserId, @ParentId, @Name, @Value, @Type)", conn);
+                cmd.Parameters.AddWithValue("@GameId", propertyDTO.gameId);
+                cmd.Parameters.AddWithValue("@UserId", propertyDTO.userId);
+                cmd.Parameters.AddWithValue("@ParentId", propertyDTO.parentId);
+                cmd.Parameters.AddWithValue("@Name", propertyDTO.name);
+                cmd.Parameters.AddWithValue("@Value", propertyDTO.value);
+                cmd.Parameters.AddWithValue("@Type", propertyDTO.type);
                 cmd.ExecuteNonQuery();
             }
         }
 
-        public void Update(int Id, int? GameId, int? ParentId, string Name, string Value, string propertyType)
+        public void Update(int Id, int GameId, int? ParentId, string Name, string Value, string propertyType)
         {
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("UPDATE property SET gameId = @GameId, parentId = @ParentId, propertyName = @Name, propertyValue = @Value, propertyType = @Type WHERE propertyId = @PropertyId", conn);
+                MySqlCommand cmd = new MySqlCommand("UPDATE property SET gameId = @GameId, parentId = @ParentId, propertyName = @Name, propertyValue = @Value, propertyType = @Type " +
+                    "WHERE propertyId = @PropertyId", conn);
                 cmd.Parameters.AddWithValue("@PropertyId", Id);
                 cmd.Parameters.AddWithValue("@GameId", GameId);
                 cmd.Parameters.AddWithValue("@ParentId", ParentId);
@@ -94,31 +127,53 @@ namespace SmokeDAL
                 cmd.ExecuteNonQuery();
             }
         }
-        public PropertyDTO GetDetails(int Id)
+        public List<PropertyDTO> GetDetails(int PropertyId, int? ParentId)
         {
-            PropertyDTO propertyDTO = new PropertyDTO();
+            List<PropertyDTO> propertyDTOs = new List<PropertyDTO>();
+            
 
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT propertyId, gameId, parentId, propertyName, propertyValue, propertyType FROM property WHERE PropertyId = @PropertyId", conn);
-                cmd.Parameters.AddWithValue("@PropertyId", Id);
+                MySqlCommand cmd1 = new MySqlCommand("SELECT propertyId, gameId, userId, parentId, propertyName, propertyValue, propertyType FROM property WHERE PropertyId = @PropertyId", conn);
+                MySqlCommand cmd2 = new MySqlCommand("SELECT propertyId, gameId, userId, parentId, propertyName, propertyValue, propertyType FROM property WHERE ParentId = @PropertyId", conn);
 
-                using (MySqlDataReader reader = cmd.ExecuteReader())
+                cmd1.Parameters.AddWithValue("@PropertyId", PropertyId);
+                cmd2.Parameters.AddWithValue("@PropertyId", PropertyId);
+
+                using (MySqlDataReader reader = cmd1.ExecuteReader())
                 {
                     while (reader.Read())
                     {
+                        PropertyDTO propertyDTO = new PropertyDTO();
                         propertyDTO.Id = Convert.ToInt32(reader["propertyId"]);
-                        propertyDTO.gameId = reader["gameId"] == DBNull.Value ? null : Convert.ToInt32(reader["gameId"]);
+                        propertyDTO.gameId = Convert.ToInt32(reader["gameId"]);
+                        propertyDTO.userId = Convert.ToInt32(reader["userId"]);
                         propertyDTO.parentId = reader["parentId"] == DBNull.Value ? null : Convert.ToInt32(reader["parentId"]);
                         propertyDTO.name = reader["propertyName"].ToString();
                         propertyDTO.value = reader["propertyValue"].ToString();
                         propertyDTO.type = reader["propertyType"].ToString();
-                        cmd.ExecuteNonQuery();
+                        propertyDTOs.Add(propertyDTO);
                     }
                 }
-            }
-            return propertyDTO;
+
+                using (MySqlDataReader reader = cmd2.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            PropertyDTO propertyDTO = new PropertyDTO();
+                            propertyDTO.Id = Convert.ToInt32(reader["propertyId"]);
+                            propertyDTO.gameId = Convert.ToInt32(reader["gameId"]);
+                            propertyDTO.userId = Convert.ToInt32(reader["userId"]);
+                            propertyDTO.parentId = reader["parentId"] == DBNull.Value ? null : Convert.ToInt32(reader["parentId"]);
+                            propertyDTO.name = reader["propertyName"].ToString();
+                            propertyDTO.value = reader["propertyValue"].ToString();
+                            propertyDTO.type = reader["propertyType"].ToString();
+                            propertyDTOs.Add(propertyDTO);
+                        }
+                    }
+                }
+            return propertyDTOs;
         }
     }
 }

@@ -17,22 +17,24 @@ namespace SmokeLogic
             _propertyDAL = propertyDAL;
         }
 
-        public void Update(int Id, int? GameId, int? ParentId, string Name, string Value, string PropertyType)
+        public void Update(int Id, int GameId, int? ParentId, string Name, string Value, string PropertyType)
         {
 
             _propertyDAL.Update(Id, GameId, ParentId, Name, Value, PropertyType);
         }
 
-        public Property GetDetails(int Id)
+        public List<Property> GetDetails(int PropertyId, int? ParentId)
         {
-            Property property = new Property();
-            PropertyDTO propertyDTO = _propertyDAL.GetDetails(Id);
+            List<Property> properties = new List<Property>();
+            List<PropertyDTO> propertyDTOs = _propertyDAL.GetDetails(PropertyId, ParentId);
 
-            property.Id = propertyDTO.Id;
-            property.gameId = propertyDTO.gameId;
-            property.parentId = propertyDTO.parentId;
+            foreach(PropertyDTO propertyDTO in propertyDTOs)
+            {
+                properties.Add(new Property(propertyDTO));
+                
+            }
 
-            return property;
+            return properties;
         }
     }
 }
