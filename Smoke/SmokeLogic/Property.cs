@@ -5,6 +5,11 @@ namespace SmokeLogic
 {
     public class Property
     {
+        public Property()
+        {
+
+        }
+
         public Property(PropertyDTO propertyDTO)
         {
             Id = propertyDTO.Id;

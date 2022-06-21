@@ -17,10 +17,10 @@ namespace SmokeLogic
             _propertyDAL = propertyDAL;
         }
 
-        public void Update(int Id, int GameId, int? ParentId, string Name, string Value, string PropertyType)
+        public void Update(int Id, int GameId, string Name, string Value, string PropertyType)
         {
 
-            _propertyDAL.Update(Id, GameId, ParentId, Name, Value, PropertyType);
+            _propertyDAL.Update(Id, GameId, Name, Value, PropertyType);
         }
 
         public List<Property> GetDetails(int PropertyId, int? ParentId)

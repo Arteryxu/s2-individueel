@@ -10,6 +10,6 @@ namespace SmokeInterfaces
         List<PropertyDTO> GetAll();
         List<PropertyDTO> GetGameProperties();
         List<PropertyDTO> GetDetails(int PropertyId, int? ParentId);
-        void Update(int Id, int GameId, int? ParentId, string name, string Value, string propertyType);
+        void Update(int Id, int GameId, string name, string Value, string propertyType);
     }
 }

@@ -68,9 +68,9 @@ namespace SmokeUI.Controllers
         // POST: PropertyController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int Id, int GameId, int? ParentId, string Name, string Value, string PropertyType, IFormCollection collection)
+        public ActionResult Edit(int Id, int GameId, string Name, string Value, string PropertyType, IFormCollection collection)
         {
-            propertyHandler.Update(Id, GameId, ParentId, Name, Value, PropertyType);
+            propertyHandler.Update(Id, GameId, Name, Value, PropertyType);
             return View();
         }
 

@@ -100,16 +100,15 @@ namespace SmokeDAL
             }
         }
 
-        public void Update(int Id, int GameId, int? ParentId, string Name, string Value, string propertyType)
+        public void Update(int Id, int GameId, string Name, string Value, string propertyType)
         {
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("UPDATE property SET gameId = @GameId, parentId = @ParentId, propertyName = @Name, propertyValue = @Value, propertyType = @Type " +
+                MySqlCommand cmd = new MySqlCommand("UPDATE property SET gameId = @GameId, propertyName = @Name, propertyValue = @Value, propertyType = @Type " +
                     "WHERE propertyId = @PropertyId", conn);
                 cmd.Parameters.AddWithValue("@PropertyId", Id);
                 cmd.Parameters.AddWithValue("@GameId", GameId);
-                cmd.Parameters.AddWithValue("@ParentId", ParentId);
                 cmd.Parameters.AddWithValue("@Name", Name);
                 cmd.Parameters.AddWithValue("@Value", Value);
                 cmd.Parameters.AddWithValue("@Type", propertyType);
@@ -122,11 +121,53 @@ namespace SmokeDAL
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("DELETE FROM property WHERE propertyId = @PropertyId", conn);
-                cmd.Parameters.AddWithValue("@PropertyId", Id);
-                cmd.ExecuteNonQuery();
+
+                int firstId = Id;
+                int parentId = 0;
+
+                MySqlCommand cmd1 = new MySqlCommand("SELECT propertyId, parentId FROM property WHERE parentId = @PropertyId", conn);
+                MySqlCommand cmd2 = new MySqlCommand("DELETE FROM property WHERE propertyId = @PropertyId", conn);
+
+                cmd1.Parameters.AddWithValue("@PropertyId", Id);
+                using (MySqlDataReader reader = cmd1.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Id = Convert.ToInt32(reader["propertyId"]);
+                        parentId = Convert.ToInt32(reader["parentId"]);
+                        if (parentId > 0) DeleteChildProperty(parentId, Id, conn);
+                    }
+                }
+                
+                cmd2.Parameters.AddWithValue("@PropertyId", firstId);
+                cmd2.ExecuteNonQuery();
             }
         }
+
+        public void DeleteChildProperty(int parentId, int Id, MySqlConnection conn)
+        {
+            int prevParentId = Id;
+            using (MySqlConnection conn2 = GetConnection())
+            {
+                conn2.Open();
+                MySqlCommand cmd1 = new MySqlCommand("SELECT propertyId, parentId FROM property WHERE parentId = @PropertyId", conn2);
+                MySqlCommand cmd2 = new MySqlCommand("DELETE FROM property WHERE propertyId = @PropertyId", conn2);
+
+                cmd1.Parameters.AddWithValue("@PropertyId", Id);
+                using (MySqlDataReader reader = cmd1.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Id = Convert.ToInt32(reader["propertyId"]);
+                        parentId = Convert.ToInt32(reader["parentId"]);
+                        if (parentId == prevParentId) DeleteChildProperty(parentId, Id, conn2);
+                    }
+                }
+                cmd2.Parameters.AddWithValue("@PropertyId", Id);
+                cmd2.ExecuteNonQuery();
+            }
+        }
+
         public List<PropertyDTO> GetDetails(int PropertyId, int? ParentId)
         {
             List<PropertyDTO> propertyDTOs = new List<PropertyDTO>();
