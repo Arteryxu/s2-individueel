@@ -72,7 +72,7 @@ namespace SmokeDAL
                         List<GameDTO> gameDTOs = new List<GameDTO>();
                         gameDTOs.Add(new GameDTO()
                         {
-                            Id = reader["GameId"] == DBNull.Value ? null : Convert.ToInt32(reader["GameId"]),
+                            Id = Convert.ToInt32(reader["GameId"]),
                             Name = reader["gameName"].ToString()
                         });
                         userDTOs.Add(new UserDTO()
@@ -150,7 +150,7 @@ namespace SmokeDAL
             {
                 conn.Open();
 
-                MySqlCommand cmd = new MySqlCommand("INSERT INTO usergame(gameId, userId) VALUES(@GameId, @UserId)", conn);
+                MySqlCommand cmd = new MySqlCommand("INSERT INTO usergame(userId, gameId) VALUES(@UserId, @GameId)", conn);
 
                 cmd.Parameters.AddWithValue("@GameId", GameId);
                 cmd.Parameters.AddWithValue("@UserId", UserId);
@@ -219,7 +219,7 @@ namespace SmokeDAL
                 {
                     while (reader.Read())
                     {
-                        userDTO.Id = Convert.ToInt32(reader["uId"]);
+                        userDTO.Id = Convert.ToInt32(reader["Id"]);
                         userDTO.Name = reader["Name"].ToString();
                     }
                 }

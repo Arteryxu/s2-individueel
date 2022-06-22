@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using SmokeDAL;
 using SmokeInterfaces;
 using SmokeLogic;
+using SmokeTest.MockDAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -12,6 +12,7 @@
     <ProjectReference Include="..\SmokeDAL\SmokeDAL.csproj" />
     <ProjectReference Include="..\SmokeInterfaces\SmokeInterfaces.csproj" />
     <ProjectReference Include="..\SmokeLogic\SmokeLogic.csproj" />
+    <ProjectReference Include="..\SmokeTest\SmokeTest.csproj" />
   </ItemGroup>
 
 </Project>

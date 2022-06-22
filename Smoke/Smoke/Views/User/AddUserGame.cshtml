@@ -13,12 +13,12 @@
         <form asp-action="AddUserGame">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Id" value=UserId class="control-label"></label>
-                <input asp-for="Id" value=UserId class="form-control" />
+                <label asp-for="Id" value=UserId>UserId</label>
+                <input asp-for="Id" class="form-control" />
                 <span asp-validation-for="Id" value=UserId class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Games[0].Id" class="control-label"></label>
+                <label asp-for="Games[0].Id" value="GameId">GameId</label>
                 <input asp-for="Games[0].Id" class="form-control" />
                 <span asp-validation-for="Games[0].Id" value=UserId class="text-danger"></span>
             </div>

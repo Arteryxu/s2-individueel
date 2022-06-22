@@ -41,12 +41,11 @@ namespace SmokeDAL
                         propertyDTOs.Add(new PropertyDTO()
                         {
                             Id = Convert.ToInt32(reader["propertyId"]),
+                            parentId = reader["parentId"] == DBNull.Value ? null : Convert.ToInt32(reader["parentId"]),
                             gameId = Convert.ToInt32(reader["gameId"]),
                             userId = Convert.ToInt32(reader["userId"]),
-                            parentId = reader["parentId"] == DBNull.Value ? null : Convert.ToInt32(reader["parentId"]),
                             name = reader["propertyName"].ToString(),
                             value = reader["propertyValue"].ToString()
-                            //Location = reader["location"].ToString()
                         });
                     }
                 }
@@ -75,7 +74,6 @@ namespace SmokeDAL
                             parentId = reader["parentId"] == DBNull.Value ? null : Convert.ToInt32(reader["parentId"]),
                             name = reader["propertyName"].ToString(),
                             value = reader["propertyValue"].ToString()
-                            //Location = reader["location"].ToString()
                         });
                     }
                 }
@@ -135,7 +133,7 @@ namespace SmokeDAL
                     {
                         Id = Convert.ToInt32(reader["propertyId"]);
                         parentId = Convert.ToInt32(reader["parentId"]);
-                        if (parentId > 0) DeleteChildProperty(parentId, Id, conn);
+                        if (parentId > 0) DeleteChildProperty(Id);
                     }
                 }
                 
@@ -144,8 +142,9 @@ namespace SmokeDAL
             }
         }
 
-        public void DeleteChildProperty(int parentId, int Id, MySqlConnection conn)
+        public void DeleteChildProperty(int Id)
         {
+            int parentId = 0;
             int prevParentId = Id;
             using (MySqlConnection conn2 = GetConnection())
             {
@@ -160,7 +159,7 @@ namespace SmokeDAL
                     {
                         Id = Convert.ToInt32(reader["propertyId"]);
                         parentId = Convert.ToInt32(reader["parentId"]);
-                        if (parentId == prevParentId) DeleteChildProperty(parentId, Id, conn2);
+                        if (parentId == prevParentId) DeleteChildProperty(Id);
                     }
                 }
                 cmd2.Parameters.AddWithValue("@PropertyId", Id);

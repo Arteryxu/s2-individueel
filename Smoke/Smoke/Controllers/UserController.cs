@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SmokeLogic;
 using SmokeUI.Models;
+using System;
 using System.Collections.Generic;
 
 namespace SmokeUI.Controllers
@@ -95,9 +96,9 @@ namespace SmokeUI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddUserGame(IFormCollection collection, User User, int GameId)
+        public ActionResult AddUserGame(IFormCollection collection, User User, [FromForm] int GameId)
         {
-            userColl.AddUserGame(GameId, User.Id);
+            userColl.AddUserGame(Convert.ToInt32(User.Games[0].Id), User.Id);
             return RedirectToAction(nameof(UserGameIndex));
         }
 

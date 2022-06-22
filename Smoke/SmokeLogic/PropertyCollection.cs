@@ -18,6 +18,10 @@ namespace SmokeLogic
             _propertyDAL = propertyDAL;
         }
 
+        public PropertyCollection()
+        {
+        }
+
         public List<Property> GetAll()
         {
             List<PropertyDTO> propertyDTOs = _propertyDAL.GetAll();

@@ -17,6 +17,10 @@ namespace SmokeLogic
             _propertyDAL = propertyDAL;
         }
 
+        public PropertyHandler()
+        {
+        }
+
         public void Update(int Id, int GameId, string Name, string Value, string PropertyType)
         {
 
